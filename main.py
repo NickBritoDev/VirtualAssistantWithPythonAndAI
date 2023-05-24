@@ -1,9 +1,7 @@
 import re
-from sched import scheduler
 import threading
 import winsound
-import pygame
-import schedule
+import pygame 
 import speech_recognition as sr
 import sounddevice as sd
 import wavio as wv
@@ -173,6 +171,20 @@ while True:
             webbrowser.open("https://www.instagram.com/")
         elif fala == "abrir o facebook":
             webbrowser.open("https://www.facebook.com/")
+        elif fala == "abrir a bet":
+            webbrowser.open("https://www.bet365.com/")
+        elif fala == "abrir o mercado livre":
+            webbrowser.open("https://www.mercadolivre.com.br/")
+        elif fala == "abrir a amazon":
+            webbrowser.open("https://www.amazon.com/")
+        elif fala == "abrir o linkedin":
+            webbrowser.open("https://www.linkedin.com/")
+        elif fala == "abrir o github":
+            webbrowser.open("https://github.com/")
+        elif fala == "abrir a twitch":
+            webbrowser.open("https://www.twitch.tv/")
+        elif fala == "abrir o pinterest":
+            webbrowser.open("https://br.pinterest.com/")
 
         # deliga e fecha o navegador
         powerOff = "sair"

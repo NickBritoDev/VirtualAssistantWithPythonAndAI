@@ -1,7 +1,7 @@
 import re
 import threading
 import winsound
-import pygame 
+import pygame
 import speech_recognition as sr
 import sounddevice as sd
 import wavio as wv
@@ -12,6 +12,7 @@ import datetime
 import time
 import wikipedia
 import pywhatkit
+import yfinance as yf
 import os
 
 alarme_ativo = False
@@ -94,6 +95,28 @@ def pesquisa_youtube(fala):
     print("Tocando...")
 
 
+def obter_cotacao_acao(symbol):
+    try:
+        ticker = yf.Ticker(symbol)
+        cotacao_atual = ticker.history(period="1d")["Close"].iloc[-1]
+        return cotacao_atual
+    except Exception as e:
+        print("Ocorreu um erro ao obter a cotação da ação:", str(e))
+        return None
+
+
+def pesquisa_cotacao_acao(fala):
+    symbol = fala.replace("Cotação da ação", "").strip()
+    cotacao = obter_cotacao_acao(symbol)
+    if cotacao is not None:
+        resultado = f"A cotação atual da ação {symbol} é: {cotacao:.2f}"
+        print(resultado)
+        iaFala(resultado)
+    else:
+        print("Não foi possível obter a cotação da ação.")
+        iaFala("Não foi possível obter a cotação da ação.")
+
+
 def grava():
     freq = 48000
     duration = 5
@@ -159,24 +182,50 @@ while True:
             pesquisa_wikipedia(search_query)
 
         # pesquisa no youtube
-        if fala.startswith("toque"):
+        if fala.startswith("toque") or fala.startswith("play"):
             pesquisa_youtube(fala)
 
+        # faz a cotação de determinada ação (bolsa de valores)
+        if fala.startswith("cotação da ação"):
+            search_query = fala.replace("cotação da ação", "").strip()
+            time.sleep(2)
+            pesquisa_cotacao_acao(search_query)
+
         # executa comando especificos
+        # informações
         if fala == "abrir o youtube":
             webbrowser.open("https://www.youtube.com/")
         elif fala == "abrir o chat gpt":
             webbrowser.open("https://chat.openai.com/")
+        elif fala == "abrir o google":
+            webbrowser.open("https://www.google.com/")
+        elif fala == "abrir o wikipedia":
+            webbrowser.open("https://pt.wikipedia.org/")
+        elif fala == "abrir a cnn":
+            webbrowser.open("https://www.cnnbrasil.com.br/")
+        elif fala == "abrir a forbes":
+            webbrowser.open("https://www.forbes.com/")
+        elif fala == "abrir o stack overflow":
+            webbrowser.open("https://stackoverflow.com/")
+        elif fala == "abrir o buzzfeed":
+            webbrowser.open("https://www.buzzfeed.com/")
+        elif fala == "abrir o the new york times":
+            webbrowser.open("https://www.nytimes.com/")
+        elif fala == "abrir a nasa":
+            webbrowser.open("https://www.nasa.gov/")
+        elif fala == "abrir o national geographic":
+            webbrowser.open("https://www.nationalgeographic.com/")
+        # redes sociais
         elif fala == "abrir o instagram":
             webbrowser.open("https://www.instagram.com/")
         elif fala == "abrir o facebook":
             webbrowser.open("https://www.facebook.com/")
-        elif fala == "abrir a bet":
-            webbrowser.open("https://www.bet365.com/")
-        elif fala == "abrir o mercado livre":
-            webbrowser.open("https://www.mercadolivre.com.br/")
-        elif fala == "abrir a amazon":
-            webbrowser.open("https://www.amazon.com/")
+        elif fala == "abrir o whats app":
+            webbrowser.open("https://web.whatsapp.com/")
+        elif fala == "abrir o reddit":
+            webbrowser.open("https://www.reddit.com/")
+        elif fala == "abrir o tiktok":
+            webbrowser.open("https://www.tiktok.com/")
         elif fala == "abrir o linkedin":
             webbrowser.open("https://www.linkedin.com/")
         elif fala == "abrir o github":
@@ -185,6 +234,66 @@ while True:
             webbrowser.open("https://www.twitch.tv/")
         elif fala == "abrir o pinterest":
             webbrowser.open("https://br.pinterest.com/")
+        elif fala == "abrir o twitter":
+            webbrowser.open("https://www.twitter.com/")
+        # entreterimento
+        elif fala == "abrir o imdb":
+            webbrowser.open("https://www.imdb.com/")
+        elif fala == "abrir o tudo gostoso":
+            webbrowser.open("https://www.tudogostoso.com.br/")
+        elif fala == "abrir letras":
+            webbrowser.open("https://www.letras.mus.br/")
+        elif fala == "abrir o netflix":
+            webbrowser.open("https://www.netflix.com/br/")
+        elif fala == "abrir o amazon prime":
+            webbrowser.open("https://www.amazon.com/amazonprime/")
+        elif fala == "abrir o spotify":
+            webbrowser.open("https://www.spotify.com/")
+        elif fala == "abrir o rotten tomatoes":
+            webbrowser.open("https://www.rottentomatoes.com/")
+        # esportes
+        elif fala == "abrir a bet365":
+            webbrowser.open("https://www.bet365.com/")
+        elif fala == "abrir a espn ":
+            webbrowser.open("https://www.espn.com/")
+        elif fala == "abrir a fifa":
+            webbrowser.open("https://www.fifa.com/")
+        elif fala == "abrir a nba":
+            webbrowser.open("https://www.nba.com/")
+        elif fala == "abrir a nfl":
+            webbrowser.open("https://www.nfl.com/")
+        elif fala == "abrir a uefa":
+            webbrowser.open("https://www.uefa.com/")
+        elif fala == "abrir a 365 scores ":
+            webbrowser.open("https://www.365scores.com/")
+        # compras
+        elif fala == "abrir o ebay":
+            webbrowser.open("https://www.ebay.com/")
+        elif fala == "abrir o mercado livre":
+            webbrowser.open("https://www.mercadolivre.com.br/")
+        elif fala == "abrir a amazon":
+            webbrowser.open("https://www.amazon.com/")
+        elif fala == "abrir a olx":
+            webbrowser.open("https://www.olx.com.br/")
+        elif fala == "abrir a magazine luiza":
+            webbrowser.open("https://www.magazineluiza.com.br/")
+        elif fala == "abrir a americanas":
+            webbrowser.open("https://www.americanas.com.br/")
+        elif fala == "abrir a shopee":
+            webbrowser.open("https://shopee.com.br/")
+        elif fala == "abrir o aliexpress":
+            webbrowser.open("https://pt.aliexpress.com/")
+        # viagens
+        elif fala == "abrir o booking.com ":
+            webbrowser.open("https://www.booking.com/")
+        elif fala == "abrir o airbnb ":
+            webbrowser.open("https://www.airbnb.com/")
+        elif fala == "abrir o tripe advisor":
+            webbrowser.open("https://www.tripadvisor.com/")
+        elif fala == "abrir o kayak":
+            webbrowser.open("https://www.kayak.com/")
+        elif fala == "abrir o trivago":
+            webbrowser.open("https://www.trivago.com/")
 
         # deliga e fecha o navegador
         powerOff = "sair"
